@@ -1,34 +1,26 @@
 package org.skypro.skyshop.product;
 
-public class SearchEngine {
-    private Searchable[] searchable;
-    private static int counter = 0;
+import java.util.ArrayList;
 
-    public SearchEngine(int size) {
-        if (size <= 0) {
-            throw new IllegalArgumentException("размер массива должен быть больше 0");
-        }
-        this.searchable = new Searchable[size];
+public class SearchEngine {
+    private ArrayList<Searchable> searchable;
+
+    public SearchEngine() {
+        this.searchable = new ArrayList<>();
     }
 
-    public Searchable[] search(String text) {
-        Searchable[] find = new Searchable[5];
-        int i = 0;
+    public ArrayList<Searchable> search(String text) {
+        ArrayList<Searchable> find = new ArrayList<>();
         for (Searchable searchable1 : searchable) {
             if (searchable1.searchTerm().contains(text)) {
-                find[i] = searchable1;
-                i++;
-            }
-            if (i == 5) {
-                break;
+                find.add(searchable1);
             }
         }
         return find;
     }
 
     public void add(Searchable newElement) {
-        searchable[counter] = newElement;
-        counter++;
+        searchable.add(newElement);
     }
 
     public Searchable mostSearchable(String search) {
@@ -36,17 +28,17 @@ public class SearchEngine {
         int order = 0;
         int max = 0;
         Searchable find = null;
-        for (; i < counter; i++) {
+        for (; i < searchable.size(); i++) {
             int count = 0;
-            int orderSubstring = searchable[i].searchTerm().indexOf(search, order);
+            int orderSubstring = searchable.get(i).searchTerm().indexOf(search, order);
             while (orderSubstring != -1) {
                 count++;
                 order = orderSubstring + search.length();
-                orderSubstring = searchable[i].searchTerm().indexOf(search, order);
+                orderSubstring = searchable.get(i).searchTerm().indexOf(search, order);
             }
             if (max < count) {
                 max = count;
-                find = searchable[i];
+                find = searchable.get(i);
             }
         }
         try {

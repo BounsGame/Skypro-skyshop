@@ -18,7 +18,6 @@ public class App {
         basket1.addProduct(product3);
         basket1.addProduct(product4);
         basket1.addProduct(product5);
-        basket1.addProduct(product1);
         basket1.printContentsBasket();
 
         if (basket1.checkProduct("Monster")) {
@@ -33,7 +32,7 @@ public class App {
             System.out.println("Тавара нет в корзине");
         }
 
-        SearchEngine catalog = new SearchEngine(7);
+        SearchEngine catalog = new SearchEngine();
         for (Product basket : basket1.getBasket()) {
             catalog.add(basket);
         }
@@ -41,6 +40,14 @@ public class App {
         Article Lays = new Article("Lays", "chips with taste of salt");
         catalog.add(Lays);
         catalog.add(Monster);
+
+        System.out.println("Удалённые продукты \n" + basket1.removeProduct("Saint Spring"));
+        System.out.println("\nначал выводить продукты после удаления");
+        basket1.printContentsBasket();
+
+        System.out.println("Удалённые продукты \n" + basket1.removeProduct("Saint Spring"));
+        System.out.println("\nначал выводить продукты после удаления");
+        basket1.printContentsBasket();
 
         basket1.clearBasket();
         basket1.printContentsBasket();
@@ -51,9 +58,9 @@ public class App {
             System.out.println("Тавара нет в корзине");
         }
 
-        System.out.println(Arrays.toString(catalog.search("Lays")));
-        System.out.println(Arrays.toString(catalog.search("Monster")));
-        System.out.println(Arrays.toString(catalog.search("fix price")));
+        System.out.println(Arrays.toString(catalog.search("Lays").toArray()));
+        System.out.println(Arrays.toString(catalog.search("Monster").toArray()));
+        System.out.println(Arrays.toString(catalog.search("PRODUCT").toArray()));
 
         try {
             DiscountedProduct russianPotato = new DiscountedProduct("Russian potato", 100, 130);
