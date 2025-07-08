@@ -2,38 +2,29 @@ package org.skypro.skyshop.basket;
 
 import org.skypro.skyshop.product.Product;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class ProductBasket {
-    private ArrayList<Product> basket = new ArrayList<>();
+    private HashMap<String, ArrayList<Product>> basket = new HashMap();
 
-    public ArrayList<Product> getBasket() {
+    public HashMap<String, ArrayList<Product>> getBasket() {
         return basket;
     }
 
     public void addProduct(Product newProduct) {
-        basket.add(newProduct);
+        ArrayList<Product> productList = new ArrayList<>();
+        productList.add(newProduct);
+        basket.put(newProduct.getName(), productList);
     }
 
     public int sumPrice() {
         int sum = 0;
-        for (int i = 0; i < quantityProduct(); i++) {
-            sum += basket.get(i).getPrice();
-        }
-        return sum;
-    }
-
-    public int quantityProduct() {
-        int quantity = 0;
-        for (int i = 0; i < basket.size(); i++) {
-            if (basket.get(i) != null) {
-                quantity++;
+        for (String kay : basket.keySet()) {
+            for (int i = 0; i < basket.get(kay).size(); i++) {
+                sum += basket.get(kay).get(i).getPrice();
             }
         }
-
-        return quantity;
+        return sum;
     }
 
     public void printContentsBasket() {
@@ -41,8 +32,10 @@ public class ProductBasket {
             System.out.println("в корзине пусто");
             return;
         }
-        for (int i = 0; i < quantityProduct(); i++) {
-            System.out.println(basket.get(i).toString());
+        for (String kay : basket.keySet()) {
+            for (int i = 0; i < basket.get(kay).size(); i++) {
+                System.out.println(basket.get(kay).get(i).toString());
+            }
         }
         System.out.println("Итого: " + sumPrice());
         System.out.println("Специальных товаров: " + calculateSpecial());
@@ -52,9 +45,11 @@ public class ProductBasket {
         if (basket.isEmpty()) {
             return false;
         }
-        for (int i = 0; i < quantityProduct(); i++) {
-            if (product.equals(basket.get(i).getName())) {
-                return true;
+        for (String kay : basket.keySet()) {
+            for (int i = 0; i < basket.get(kay).size(); i++) {
+                if (product.equals(basket.get(kay).get(i).getName())) {
+                    return true;
+                }
             }
         }
         return false;
@@ -66,27 +61,31 @@ public class ProductBasket {
 
     public int calculateSpecial() {
         int sum = 0;
-        for (int i = 0; i < quantityProduct(); i++) {
-            if (basket.get(i).isSpecial()) {
-                sum++;
+        for (String kay : basket.keySet()) {
+            for (int i = 0; i < basket.get(kay).size(); i++) {
+                if (basket.get(kay).get(i).isSpecial()) {
+                    sum++;
+                }
             }
         }
         return sum;
     }
 
     public List removeProduct(String delete) {
-        Iterator<Product> iterator = basket.iterator();
         List<Product> removed = new ArrayList<>();
-        while (iterator.hasNext()) {
-            Product nowProduct = iterator.next();
-            if (nowProduct.getName().contains(delete)) {
-                removed.add(nowProduct);
-                iterator.remove();
+        for (String kay : basket.keySet()) {
+            Iterator<Product> iterator = basket.get(kay).iterator();
+            while (iterator.hasNext()) {
+                Product nowProduct = iterator.next();
+                if (nowProduct.getName().contains(delete)) {
+                    removed.add(nowProduct);
+                    iterator.remove();
+                }
             }
-        }
-        if (removed.isEmpty()) {
-            System.out.println("Список пуст");
-            return removed;
+            if (removed.isEmpty()) {
+                System.out.println("Список пуст");
+                return removed;
+            }
         }
         return removed;
     }

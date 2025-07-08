@@ -1,26 +1,27 @@
 package org.skypro.skyshop.product;
 
 import java.util.ArrayList;
+import java.util.TreeMap;
 
-public class SearchEngine {
-    private ArrayList<Searchable> searchable;
+public class SearchEngine implements Comparable<Searchable> {
+    private TreeMap<String, Searchable> searchable;
 
     public SearchEngine() {
-        this.searchable = new ArrayList<>();
+        this.searchable = new TreeMap<>();
     }
 
     public ArrayList<Searchable> search(String text) {
         ArrayList<Searchable> find = new ArrayList<>();
-        for (Searchable searchable1 : searchable) {
-            if (searchable1.searchTerm().contains(text)) {
-                find.add(searchable1);
+        for (String kay : searchable.keySet()) {
+            if (searchable.get(kay).searchTerm().contains(text)) {
+                find.add(searchable.get(kay));
             }
         }
         return find;
     }
 
     public void add(Searchable newElement) {
-        searchable.add(newElement);
+        searchable.put(newElement.getName(), newElement);
     }
 
     public Searchable mostSearchable(String search) {
@@ -28,17 +29,17 @@ public class SearchEngine {
         int order = 0;
         int max = 0;
         Searchable find = null;
-        for (; i < searchable.size(); i++) {
+        for (String kay : searchable.keySet()) {
             int count = 0;
-            int orderSubstring = searchable.get(i).searchTerm().indexOf(search, order);
+            int orderSubstring = searchable.get(kay).searchTerm().indexOf(search, order);
             while (orderSubstring != -1) {
                 count++;
                 order = orderSubstring + search.length();
-                orderSubstring = searchable.get(i).searchTerm().indexOf(search, order);
+                orderSubstring = searchable.get(kay).searchTerm().indexOf(search, order);
             }
             if (max < count) {
                 max = count;
-                find = searchable.get(i);
+                find = searchable.get(kay);
             }
         }
         try {
@@ -49,5 +50,10 @@ public class SearchEngine {
             System.out.println("для " + search + " не нашлось подходящей статьи");
         }
         return find;
+    }
+
+    @Override
+    public int compareTo(Searchable o) {
+        return o.getName().compareTo(o.getName());
     }
 }

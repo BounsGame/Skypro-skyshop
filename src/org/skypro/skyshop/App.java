@@ -33,11 +33,13 @@ public class App {
         }
 
         SearchEngine catalog = new SearchEngine();
-        for (Product basket : basket1.getBasket()) {
-            catalog.add(basket);
-        }
-        Article Monster = new Article("Monster", "Energetic drink with taste of peach");
-        Article Lays = new Article("Lays", "chips with taste of salt");
+        catalog.add(product1);
+        catalog.add(product2);
+        catalog.add(product3);
+        catalog.add(product4);
+        catalog.add(product5);
+        Article Monster = new Article("Monster Article", "Energetic drink with taste of peach");
+        Article Lays = new Article("Lays Article", "chips with taste of salt");
         catalog.add(Lays);
         catalog.add(Monster);
 
