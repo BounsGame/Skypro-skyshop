@@ -5,9 +5,9 @@ import org.skypro.skyshop.product.Product;
 import java.util.*;
 
 public class ProductBasket {
-    private HashMap<String, ArrayList<Product>> basket = new HashMap();
+    private Map<String, ArrayList<Product>> basket = new HashMap();
 
-    public HashMap<String, ArrayList<Product>> getBasket() {
+    public Map<String, ArrayList<Product>> getBasket() {
         return basket;
     }
 
@@ -45,12 +45,8 @@ public class ProductBasket {
         if (basket.isEmpty()) {
             return false;
         }
-        for (String kay : basket.keySet()) {
-            for (int i = 0; i < basket.get(kay).size(); i++) {
-                if (product.equals(basket.get(kay).get(i).getName())) {
-                    return true;
-                }
-            }
+        if (basket.containsKey(product)) {
+            return true;
         }
         return false;
     }
@@ -61,9 +57,9 @@ public class ProductBasket {
 
     public int calculateSpecial() {
         int sum = 0;
-        for (String kay : basket.keySet()) {
-            for (int i = 0; i < basket.get(kay).size(); i++) {
-                if (basket.get(kay).get(i).isSpecial()) {
+        for (String key : basket.keySet()) {
+            for (int i = 0; i < basket.get(key).size(); i++) {
+                if (basket.get(key).get(i).isSpecial()) {
                     sum++;
                 }
             }
@@ -71,22 +67,14 @@ public class ProductBasket {
         return sum;
     }
 
-    public List removeProduct(String delete) {
+    public List<Product> removeProduct(String delete) {
         List<Product> removed = new ArrayList<>();
-        for (String kay : basket.keySet()) {
-            Iterator<Product> iterator = basket.get(kay).iterator();
-            while (iterator.hasNext()) {
-                Product nowProduct = iterator.next();
-                if (nowProduct.getName().contains(delete)) {
-                    removed.add(nowProduct);
-                    iterator.remove();
-                }
-            }
-            if (removed.isEmpty()) {
-                System.out.println("Список пуст");
-                return removed;
-            }
+        if (basket.get(delete) == null) {
+            System.out.println("Список пуст");
+            return removed;
         }
+        removed = basket.get(delete);
+        basket.remove(delete);
         return removed;
     }
 }

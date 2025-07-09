@@ -1,20 +1,21 @@
 package org.skypro.skyshop.product;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.TreeMap;
 
 public class SearchEngine implements Comparable<Searchable> {
-    private TreeMap<String, Searchable> searchable;
+    private Map<String, Searchable> searchable;
 
     public SearchEngine() {
         this.searchable = new TreeMap<>();
     }
 
-    public ArrayList<Searchable> search(String text) {
-        ArrayList<Searchable> find = new ArrayList<>();
-        for (String kay : searchable.keySet()) {
-            if (searchable.get(kay).searchTerm().contains(text)) {
-                find.add(searchable.get(kay));
+    public Map<String, Searchable> search(String text) {
+        Map<String, Searchable> find = new TreeMap();
+        for (String key : searchable.keySet()) {
+            if (searchable.get(key).searchTerm().contains(text)) {
+                find.put(key, searchable.get(key));
             }
         }
         return find;
@@ -29,17 +30,17 @@ public class SearchEngine implements Comparable<Searchable> {
         int order = 0;
         int max = 0;
         Searchable find = null;
-        for (String kay : searchable.keySet()) {
+        for (String key : searchable.keySet()) {
             int count = 0;
-            int orderSubstring = searchable.get(kay).searchTerm().indexOf(search, order);
+            int orderSubstring = searchable.get(key).searchTerm().indexOf(search, order);
             while (orderSubstring != -1) {
                 count++;
                 order = orderSubstring + search.length();
-                orderSubstring = searchable.get(kay).searchTerm().indexOf(search, order);
+                orderSubstring = searchable.get(key).searchTerm().indexOf(search, order);
             }
             if (max < count) {
                 max = count;
-                find = searchable.get(kay);
+                find = searchable.get(key);
             }
         }
         try {
@@ -55,5 +56,14 @@ public class SearchEngine implements Comparable<Searchable> {
     @Override
     public int compareTo(Searchable o) {
         return o.getName().compareTo(o.getName());
+    }
+
+    @Override
+    public String toString() {
+        String sum = "";
+        for (String key : searchable.keySet()) {
+            sum += key + " " + searchable.get(key) + "\n";
+        }
+        return sum;
     }
 }

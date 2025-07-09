@@ -38,10 +38,10 @@ public class App {
         catalog.add(product3);
         catalog.add(product4);
         catalog.add(product5);
-        Article Monster = new Article("Monster Article", "Energetic drink with taste of peach");
-        Article Lays = new Article("Lays Article", "chips with taste of salt");
-        catalog.add(Lays);
-        catalog.add(Monster);
+        Article monster = new Article("Monster Article", "Energetic drink with taste of peach");
+        Article lays = new Article("Lays Article", "chips with taste of salt");
+        catalog.add(lays);
+        catalog.add(monster);
 
         System.out.println("Удалённые продукты \n" + basket1.removeProduct("Saint Spring"));
         System.out.println("\nначал выводить продукты после удаления");
@@ -60,9 +60,9 @@ public class App {
             System.out.println("Тавара нет в корзине");
         }
 
-        System.out.println(Arrays.toString(catalog.search("Lays").toArray()));
-        System.out.println(Arrays.toString(catalog.search("Monster").toArray()));
-        System.out.println(Arrays.toString(catalog.search("PRODUCT").toArray()));
+        System.out.println(catalog.search("Lays"));
+        System.out.println(catalog.search("Monster"));
+        System.out.println(catalog.search("PRODUCT"));
 
         try {
             DiscountedProduct russianPotato = new DiscountedProduct("Russian potato", 100, 130);
