@@ -12,9 +12,13 @@ public class ProductBasket {
     }
 
     public void addProduct(Product newProduct) {
-        ArrayList<Product> productList = new ArrayList<>();
-        productList.add(newProduct);
-        basket.put(newProduct.getName(), productList);
+        if (basket.containsKey(newProduct.getName())){
+            basket.get(newProduct.getName()).add(newProduct);
+        }else{
+            ArrayList<Product> productList = new ArrayList<>();
+            productList.add(newProduct);
+            basket.put(newProduct.getName(), productList);
+        }
     }
 
     public int sumPrice() {
