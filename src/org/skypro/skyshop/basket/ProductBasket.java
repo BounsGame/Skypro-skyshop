@@ -3,6 +3,7 @@ package org.skypro.skyshop.basket;
 import org.skypro.skyshop.product.Product;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ProductBasket {
     private Map<String, ArrayList<Product>> basket = new HashMap();
@@ -12,9 +13,9 @@ public class ProductBasket {
     }
 
     public void addProduct(Product newProduct) {
-        if (basket.containsKey(newProduct.getName())){
+        if (basket.containsKey(newProduct.getName())) {
             basket.get(newProduct.getName()).add(newProduct);
-        }else{
+        } else {
             ArrayList<Product> productList = new ArrayList<>();
             productList.add(newProduct);
             basket.put(newProduct.getName(), productList);
@@ -22,13 +23,7 @@ public class ProductBasket {
     }
 
     public int sumPrice() {
-        int sum = 0;
-        for (String kay : basket.keySet()) {
-            for (int i = 0; i < basket.get(kay).size(); i++) {
-                sum += basket.get(kay).get(i).getPrice();
-            }
-        }
-        return sum;
+        return basket.values().stream().flatMap(Collection::stream).mapToInt(Product::getPrice).sum();
     }
 
     public void printContentsBasket() {
@@ -36,11 +31,8 @@ public class ProductBasket {
             System.out.println("в корзине пусто");
             return;
         }
-        for (String kay : basket.keySet()) {
-            for (int i = 0; i < basket.get(kay).size(); i++) {
-                System.out.println(basket.get(kay).get(i).toString());
-            }
-        }
+        basket.values().stream().flatMap(Collection::stream)
+                .forEach(product -> System.out.println(product.toString()));
         System.out.println("Итого: " + sumPrice());
         System.out.println("Специальных товаров: " + calculateSpecial());
     }
@@ -60,15 +52,7 @@ public class ProductBasket {
     }
 
     public int calculateSpecial() {
-        int sum = 0;
-        for (String key : basket.keySet()) {
-            for (int i = 0; i < basket.get(key).size(); i++) {
-                if (basket.get(key).get(i).isSpecial()) {
-                    sum++;
-                }
-            }
-        }
-        return sum;
+        return (int) basket.values().stream().flatMap(Collection::stream).filter(Product::isSpecial).count();
     }
 
     public List<Product> removeProduct(String delete) {

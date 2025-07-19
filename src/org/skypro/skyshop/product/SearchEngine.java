@@ -1,6 +1,8 @@
 package org.skypro.skyshop.product;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SearchEngine implements Comparable<Searchable> {
     private Set<Searchable> searchable;
@@ -10,12 +12,9 @@ public class SearchEngine implements Comparable<Searchable> {
     }
 
     public Set<Searchable> search(String text) {
-        Set<Searchable> find = new TreeSet<>(new SearchableComparator());
-        for (Searchable key : searchable) {
-            if (key.getName().contains(text)) {
-                find.add(key);
-            }
-        }
+        Set<Searchable> find = searchable.stream()
+                .filter(searchable1 -> searchable1.getName().contains(text))
+                .collect(Collectors.toCollection(() -> new TreeSet<Searchable>(new SearchableComparator())));
         return find;
     }
 
